@@ -1,0 +1,36 @@
+{
+  "name": "frontend",
+  "version": "4.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf node_modules target",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "axios": "0.19.2",
+    "core-js": "3.6.5",
+    "lodash": "4.17.15",
+    "roboto-fontface": "0.10.0",
+    "vue": "2.6.11",
+    "vue-cookie": "1.1.4",
+    "vue-moment": "4.0.0",
+    "vue-router": "3.3.4",
+    "vuejs-jwt": "1.1.0",
+    "vuetify": "2.3.2"
+  },
+  "devDependencies": {
+    "@mdi/font": "5.3.45",
+    "@vue/cli-plugin-e2e-nightwatch": "4.4.6",
+    "@vue/cli-plugin-router": "4.4.6",
+    "@vue/cli-plugin-unit-jest": "4.4.6",
+    "@vue/cli-service": "4.4.6",
+    "chromedriver": "83.0.0",
+    "geckodriver": "1.19.1",
+    "sass": "1.26.9",
+    "sass-loader": "8.0.2",
+    "vue-cli-plugin-vuetify": "2.0.6",
+    "vue-template-compiler": "2.6.11",
+    "vuetify-loader": "1.5.0"
+  }
+}
