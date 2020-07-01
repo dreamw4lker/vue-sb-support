@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class EngineerSimpleListBean {
+public class EngineerSimpleSelectBean {
     private Long id;
     private String fio;
 }

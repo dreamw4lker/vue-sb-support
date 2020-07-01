@@ -1,6 +1,6 @@
 package com.betanet.configuration;
 
-import com.betanet.service.ConfigurationService;
+import com.betanet.service.api.ConfigurationService;
 import com.betanet.service.JwtUserDetailsService;
 import com.betanet.util.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;

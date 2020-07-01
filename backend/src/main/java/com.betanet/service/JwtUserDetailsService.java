@@ -1,6 +1,7 @@
 package com.betanet.service;
 
 import com.betanet.domain.User;
+import com.betanet.service.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

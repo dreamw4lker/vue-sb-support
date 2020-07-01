@@ -1,7 +1,7 @@
 package com.betanet.configuration;
 
-import com.betanet.service.ConfigurationService;
 import com.betanet.service.JwtUserDetailsService;
+import com.betanet.service.api.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
