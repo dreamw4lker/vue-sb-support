@@ -7,6 +7,7 @@ import router from './router'
 import vuetify from './plugins/vuetify';
 import VueJWT from 'vuejs-jwt'
 import VueMoment from 'vue-moment';
+import TitleComponent from "./components/title/TitleComponent";
 
 Vue.prototype.$eventBus = eventBus;
 
@@ -15,6 +16,7 @@ Vue.config.productionTip = false;
 Vue.use(VueCookie);
 Vue.use(VueJWT);
 Vue.use(VueMoment);
+Vue.component('lynx-title', TitleComponent);
 
 const sessionCookieName = 'JWT_SESSION';
 Vue.prototype.$sessionCookieName = sessionCookieName;

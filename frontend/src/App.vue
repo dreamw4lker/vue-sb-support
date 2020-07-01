@@ -1,12 +1,35 @@
 <template>
   <v-app>
-    <router-view :key="$route.fullPath"></router-view>
+    <div v-if="$router.currentRoute.path !== '/login'">
+      <v-toolbar color="primary" height="42px">
+        <v-spacer></v-spacer>
+        <v-btn
+                @click="logout"
+                text
+                color="accent"
+        >
+          <span class="mr-2">Выход</span>
+          <v-icon>{{ icons.mdiExitToApp }}</v-icon>
+        </v-btn>
+      </v-toolbar>
+    </div>
+    <router-view :key="timestampKey"></router-view>
   </v-app>
 </template>
 
 <script>
+  import { mdiExitToApp } from '@mdi/js'
+
   export default {
     name: 'App',
+    data() {
+      return {
+        icons: {
+          mdiExitToApp
+        },
+        timestampKey: null,
+      }
+    },
     created: function () {
       let session = this.$cookie.get(this.$sessionCookieName);
       if (!session) {
@@ -14,6 +37,7 @@
           this.$router.push({path: '/login'});
         }
       }
+      this.timestampKey = new Date().getTime();
     },
     mounted() {
       this.$eventBus.$on('change-page', (payload) => {
@@ -33,15 +57,16 @@
     methods: {
       changePage: function (href) {
         if (this.$router.currentRoute.path === href) {
-          this.$router.replace({path: href + '/#update'});
-          this.$nextTick(() => (this.$router.replace({path: href})))
+          this.timestampKey = new Date().getTime();
         } else {
           this.$router.push({path: href});
         }
       },
       logout: function () {
         this.$cookie.delete(this.$sessionCookieName);
-        this.$nextTick(() => (this.$router.push({path: '/login'})));
+        if (this.$router.currentRoute.path !== '/login') {
+          this.$router.push({path: '/login'});
+        }
       },
     }
   };
