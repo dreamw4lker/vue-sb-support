@@ -9,18 +9,36 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Setter
-@Table(name = "engineers", schema = "main")
+@Table(name = "events", schema = "main")
 @Getter
 @Entity
 @NoArgsConstructor
-public class Engineer {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "engineer_id")
+    private Engineer engineer;
+
+    @Column(name = "event_date")
+    private LocalDateTime eventDate;
+
+    @Column(name = "time_spent")
+    private Integer timeSpent;
+
+    @ManyToOne
+    @JoinColumn(name = "event_type_id")
+    private EventType eventType;
+
+    @ManyToOne
+    @JoinColumn(name = "place_id")
+    private Place place;
+
     @Size(max = 255)
-    @Column(name = "fio")
-    private String fio;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "create_date")
     private LocalDateTime createDate = LocalDateTime.now();

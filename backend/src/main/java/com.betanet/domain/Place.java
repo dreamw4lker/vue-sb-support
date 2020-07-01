@@ -16,14 +16,14 @@ import java.time.LocalDateTime;
 public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Size(max = 255)
     @Column(name = "place_name")
     private String placeName;
 
     @Column(name = "create_date")
-    private LocalDateTime createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
 
     @Column(name = "update_date")
     private LocalDateTime updateDate;

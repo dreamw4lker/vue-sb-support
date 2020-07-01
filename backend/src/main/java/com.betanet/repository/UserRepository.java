@@ -8,5 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface UserRepository extends CrudRepository<User, Long>, QuerydslPredicateExecutor<User> {
+public interface UserRepository extends CrudRepository<User, Integer>, QuerydslPredicateExecutor<User> {
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PlaceSimpleSelectBean {
+public class EventTypeSimpleSelectBean {
     private Integer id;
-    private String placeName;
+    private String eventType;
 }

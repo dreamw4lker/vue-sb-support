@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class EngineerSimpleSelectBean {
-    private Long id;
+    private Integer id;
     private String fio;
 }
