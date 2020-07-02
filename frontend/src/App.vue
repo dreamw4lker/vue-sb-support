@@ -1,7 +1,18 @@
 <template>
   <v-app>
     <div v-if="$router.currentRoute.path !== '/login'">
-      <v-toolbar color="primary" height="42px">
+      <v-toolbar color="primary" height="36px">
+        <v-btn text tile color="accent" @click="changePage('/main')">
+          Главная
+        </v-btn>
+        <v-divider vertical inset color="white"></v-divider>
+        <v-btn text tile color="accent" @click="changePage('/events')">
+          События
+        </v-btn>
+        <v-divider vertical inset color="white"></v-divider>
+        <v-btn text tile color="accent" @click="changePage('/results')">
+          Итоги
+        </v-btn>
         <v-spacer></v-spacer>
         <v-btn
                 @click="logout"

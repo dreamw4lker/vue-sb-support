@@ -21,28 +21,12 @@
                                 ></v-select>
                             </v-flex>
                             <v-flex xs12 class="pt-4">
-                                <v-menu
-                                        v-model="menu"
-                                        :close-on-content-click="false"
-                                        :nudge-right="40"
-                                        transition="scale-transition"
-                                        offset-y
-                                        min-width="290px"
-                                >
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field
-                                                v-model="formattedEventDate"
-                                                label="Дата"
-                                                append-icon="event"
-                                                readonly
-                                                v-bind="attrs"
-                                                v-on="on"
-                                                :rules="rules.eventDate"
-                                                outlined
-                                        ></v-text-field>
-                                    </template>
-                                    <v-date-picker color="green darken-1" v-model="editedItem.eventDate" @input="menu = false"></v-date-picker>
-                                </v-menu>
+                                <lynx-date-picker
+                                        :date="editedItem.eventDate"
+                                        label="Дата"
+                                        v-on:update="editedItem.eventDate = $event"
+                                        :rules="rules.eventDate">
+                                </lynx-date-picker>
                             </v-flex>
                             <v-flex xs12 class="pt-4">
                                 <v-text-field
@@ -107,10 +91,12 @@
 
 <script>
     import SubmitButton from "../../button/SubmitButton";
+    import DatePicker from "../../date-picker/DatePicker";
 
     export default {
         components: {
-            'lynx-submit-button': SubmitButton
+            'lynx-date-picker': DatePicker,
+            'lynx-submit-button': SubmitButton,
         },
         data () {
             return {
@@ -135,7 +121,8 @@
                         v => v !== null || 'Необходимо выбрать инженера',
                     ],
                     eventDate: [
-                        v => v !== null || 'Необходимо указать дату'
+                        v => v !== null || 'Необходимо указать дату',
+                        v => (v && v.replace(/\D/g,'').length === 8) || 'Укажите корректную дату'
                     ],
                     timeSpent: [
                         v => (v !== null && v !== '') || 'Необходимо указать затраченное время',
@@ -152,14 +139,6 @@
                         v => (v && v.length <= 255) || 'Максимальная длина описания: 255 символов'
                     ],
                 }
-            }
-        },
-        computed: {
-            formattedEventDate () {
-                if (!this.editedItem.eventDate) return null;
-
-                const [year, month, day] = this.editedItem.eventDate.split('-')
-                return `${day}.${month}.${year}`
             }
         },
         mounted() {

@@ -8,7 +8,12 @@ import com.betanet.repository.EventRepository;
 import com.betanet.repository.EventTypeRepository;
 import com.betanet.repository.PlaceRepository;
 import com.betanet.service.api.EventService;
+import com.querydsl.core.BooleanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,13 +40,16 @@ public class EventServiceImpl implements EventService {
 
     private final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    /*@Override
-    public Page<Place> getPlaces(Pageable pageable) {
-        Pageable withSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "placeName");
+    @Override
+    public Page<Event> getEvents(Pageable pageable, String dateFrom, String dateTo) {
+        Pageable withSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.DESC, "createDate");
         BooleanBuilder where = new BooleanBuilder();
-        where.and(qPlace.deleted.isFalse());
-        return placeRepository.findAll(where, withSort);
-    }*/
+        where.and(qEvent.deleted.isFalse());
+        LocalDateTime dateTimeFrom = LocalDateTime.of(LocalDate.parse(dateFrom, DATE_TIME_FORMATTER), LocalTime.MIN);
+        LocalDateTime dateTimeTo = LocalDateTime.of(LocalDate.parse(dateTo, DATE_TIME_FORMATTER), LocalTime.MAX);
+        where.and(qEvent.createDate.between(dateTimeFrom, dateTimeTo));
+        return eventRepository.findAll(where, withSort);
+    }
 
     @Override
     public boolean createEvent(EventBean eventBean) {
