@@ -7,6 +7,7 @@ import com.betanet.domain.bean.EngineerSimpleSelectBean;
 import com.betanet.domain.bean.EventTypeSimpleSelectBean;
 import com.betanet.domain.bean.PlaceSimpleSelectBean;
 import com.betanet.service.api.EngineerService;
+import com.betanet.service.api.EventService;
 import com.betanet.service.api.EventTypeService;
 import com.betanet.service.api.PlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class SelectController {
 
     @Autowired
     private EventTypeService eventTypeService;
+    
+    @Autowired
+    private EventService eventService;
 
     private final int REQUEST_LIST_MAX_SIZE = 10000;
 
@@ -74,6 +78,13 @@ public class SelectController {
                 .stream()
                 .map(item -> new PlaceSimpleSelectBean(item.getId(), item.getPlaceName()))
                 .collect(Collectors.toList()));
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/select/years")
+    public ResponseEntity<?> getYears() {
+        Map result = new HashMap<>();
+        result.put("years", eventService.getEventYears());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

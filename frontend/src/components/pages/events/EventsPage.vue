@@ -9,7 +9,7 @@
                     <v-card-text>
                         <v-form ref="filterForm" @keyup.native.enter="applyFilter" onSubmit="return false;">
                             <v-layout wrap>
-                                <v-flex xs12 sm4 class="pt-4">
+                                <v-flex xs12 sm4>
                                     <lynx-date-picker
                                             :dense="true"
                                             :date="filterItem.dateFrom"
@@ -18,7 +18,7 @@
                                             :rules="rules.date">
                                     </lynx-date-picker>
                                 </v-flex>
-                                <v-flex xs12 sm4 class="pt-4 pl-2">
+                                <v-flex xs12 sm4 class="pl-2">
                                     <lynx-date-picker
                                             :dense="true"
                                             :date="filterItem.dateTo"
@@ -28,7 +28,7 @@
                                     </lynx-date-picker>
                                 </v-flex>
                                 <v-flex xs12 sm4 class="text-xs-center text-sm-right">
-                                    <v-btn color="primary" @click="applyFilter" class="mt-4">
+                                    <v-btn color="primary" @click="applyFilter">
                                         Выбрать
                                     </v-btn>
                                 </v-flex>

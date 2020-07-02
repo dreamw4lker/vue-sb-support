@@ -3,12 +3,16 @@ package com.betanet.service.impl;
 import com.betanet.domain.Event;
 import com.betanet.domain.QEvent;
 import com.betanet.domain.bean.EventBean;
+import com.betanet.domain.bean.YearSimpleSelectBean;
 import com.betanet.repository.EngineerRepository;
 import com.betanet.repository.EventRepository;
 import com.betanet.repository.EventTypeRepository;
 import com.betanet.repository.PlaceRepository;
 import com.betanet.service.api.EventService;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +20,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -35,6 +43,9 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private PlaceRepository placeRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     private QEvent qEvent = QEvent.event;
 
@@ -52,6 +63,41 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<YearSimpleSelectBean> getEventYears() {
+        JPAQuery<Event> queryMin = new JPAQuery<>(em);
+        Event minEvent = queryMin.from(qEvent)
+                .where(qEvent.deleted.isFalse())
+                .orderBy(new OrderSpecifier<>(Order.ASC, qEvent.createDate))
+                .fetchFirst();
+
+        JPAQuery<Event> queryMax = new JPAQuery<>(em);
+        Event maxEvent = queryMax.from(qEvent)
+                .where(qEvent.deleted.isFalse())
+                .orderBy(new OrderSpecifier<>(Order.DESC, qEvent.createDate))
+                .fetchFirst();
+
+        List<YearSimpleSelectBean> yearSimpleSelectBeans = new ArrayList<>();
+
+        if (minEvent == null || maxEvent == null) {
+            return yearSimpleSelectBeans;
+        }
+
+        LocalDateTime minDateTime = minEvent.getCreateDate();
+        LocalDateTime maxDateTime = maxEvent.getCreateDate();
+        
+        if (minDateTime.isAfter(maxDateTime)) {
+            return yearSimpleSelectBeans;
+        }
+
+        int indx = 0;
+        for (int i = minDateTime.getYear(); i <= maxDateTime.getYear(); i++) {
+            yearSimpleSelectBeans.add(new YearSimpleSelectBean(indx, String.valueOf(i)));
+            indx++;
+        }
+        return yearSimpleSelectBeans;
+    }
+
+    @Override
     public boolean createEvent(EventBean eventBean) {
         try {
             if (eventBean == null || eventBean.getEngineerId() == null
@@ -66,6 +112,8 @@ public class EventServiceImpl implements EventService {
             return false;
         }
     }
+    
+    
 
     private Event toEntity(Event entity, EventBean bean) {
         if (entity == null) {
