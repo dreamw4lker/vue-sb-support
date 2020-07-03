@@ -16,6 +16,7 @@
                                             label="Год"
                                             item-text="name"
                                             item-value="id"
+                                            return-object
                                             :rules="rules.year"
                                             no-data-text="Список годов пуст"
                                             outlined
@@ -41,6 +42,43 @@
                                 </v-flex>
                             </v-layout>
                         </v-form>
+                        <v-row no-gutters>
+                            <v-col
+                                    v-for="(item, i) in results"
+                                    :key="i"
+                                    cols="12"
+                                    md="6"
+                                    class="pa-1"
+                            >
+                                <v-card tile outlined>
+                                    <v-card-title>
+                                        {{ item.engineerFio }}
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-simple-table>
+                                            <template v-slot:default>
+                                                <thead>
+                                                <tr>
+                                                    <th class="text-left">Тип события</th>
+                                                    <th class="text-left">Время в минутах</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="it in item.eventTypes" :key="it.eventTypeId">
+                                                        <td>{{ it.eventTypeName }}</td>
+                                                        <td>{{ it.sum }}</td>
+                                                    </tr>
+                                                    <tr :style="{ background: item.quarterSum < 0 ? '#ffa4a2' : '#e0f2ce'}">
+                                                        <td>Итого</td>
+                                                        <td>{{ item.quarterSum }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </template>
+                                        </v-simple-table>
+                                    </v-card-text>
+                                </v-card>
+                            </v-col>
+                        </v-row>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -54,10 +92,11 @@
           return {
               loading: false,
               yearsList: [],
+              results: [],
               quartersList: [
                   { id: 1, name: "I" },
                   { id: 2, name: "II" },
-                  { id: 3, name: "II" },
+                  { id: 3, name: "III" },
                   { id: 4, name: "IV" },
               ],
               filterItem: {
@@ -92,8 +131,19 @@
             async applyFilter() {
                 if (this.$refs.filterForm.validate()) {
                     this.loading = true;
-                    // fetch ...
-                    this.loading = false;
+                    await this.$axios
+                        .get('/api/results/list', {
+                            params: {
+                                year: Number.parseInt(this.filterItem.year.name),
+                                quarter: this.filterItem.quarter
+                            }
+                        })
+                        .then(response => {
+                            this.results = response.data.results;
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
                 }
             },
         }

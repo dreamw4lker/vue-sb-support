@@ -1,17 +1,24 @@
 package com.betanet.service.impl;
 
+import com.betanet.domain.Engineer;
 import com.betanet.domain.Event;
+import com.betanet.domain.QEngineer;
 import com.betanet.domain.QEvent;
 import com.betanet.domain.bean.EventBean;
+import com.betanet.domain.bean.EventTypeSum;
+import com.betanet.domain.bean.ResultBean;
 import com.betanet.domain.bean.YearSimpleSelectBean;
 import com.betanet.repository.EngineerRepository;
 import com.betanet.repository.EventRepository;
 import com.betanet.repository.EventTypeRepository;
 import com.betanet.repository.PlaceRepository;
+import com.betanet.service.api.EngineerService;
 import com.betanet.service.api.EventService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +35,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.querydsl.core.types.PathMetadataFactory.forProperty;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -48,6 +58,7 @@ public class EventServiceImpl implements EventService {
     private EntityManager em;
 
     private QEvent qEvent = QEvent.event;
+    private QEngineer qEngineer = QEngineer.engineer;
 
     private final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -112,8 +123,86 @@ public class EventServiceImpl implements EventService {
             return false;
         }
     }
-    
-    
+
+    @Override
+    public List<ResultBean> getResults(Integer year, Integer quarter) {
+        int startMonth;
+        int endMonth;
+        int endDay;
+        List<ResultBean> resultBeanList = new ArrayList<>();
+
+        switch (quarter) {
+            case 1:
+                startMonth = 1;
+                endMonth = 3;
+                endDay = 31;
+                break;
+            case 2:
+                startMonth = 4;
+                endMonth = 6;
+                endDay = 30;
+                break;
+            case 3:
+                startMonth = 7;
+                endMonth = 9;
+                endDay = 30;
+                break;
+            case 4:
+                startMonth = 10;
+                endMonth = 12;
+                endDay = 31;
+                break;
+            default:
+                return resultBeanList;
+        }
+
+        LocalDateTime startDateTime = LocalDateTime.of(LocalDate.of(year, startMonth, 1), LocalTime.MIN);
+        LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of(year, endMonth, endDay), LocalTime.MAX);
+
+        //TODO: move to service and autowire ?
+        BooleanBuilder engineersWhere = new BooleanBuilder();
+        engineersWhere.and(qEngineer.deleted.isFalse());
+        Iterable<Engineer> engineers = engineerRepository.findAll(engineersWhere,
+                new OrderSpecifier<>(Order.ASC, qEngineer.fio));
+
+        engineers.forEach(engineer -> {
+            JPAQuery<Event> query = new JPAQuery<>(em);
+            BooleanBuilder where = new BooleanBuilder();
+            where.and(qEvent.deleted.isFalse());
+            where.and(qEvent.eventDate.between(startDateTime, endDateTime));
+            where.and(qEvent.engineer.id.eq(engineer.getId()));
+
+            List<EventTypeSum> eventTypeSumList = query
+                    .select(qEvent.eventType.id, qEvent.eventType.eventType, qEvent.timeSpent.sum())
+                    .from(qEvent)
+                    .where(where)
+                    .groupBy(qEvent.eventType.id, qEvent.eventType.eventType)
+                    .orderBy(new OrderSpecifier<>(Order.ASC, qEvent.eventType.id))
+                    .fetch()
+                    .stream()
+                    .map(item -> new EventTypeSum(
+                            item.get(qEvent.eventType.id),
+                            item.get(qEvent.eventType.eventType),
+                            item.get(qEvent.timeSpent.sum())
+                    ))
+                    .collect(Collectors.toList());
+            Long quarterSum = 0L;
+            for (EventTypeSum eventTypeSum : eventTypeSumList) {
+                switch (eventTypeSum.getEventTypeId()) {
+                    case 3:
+                    case 4:
+                        quarterSum += eventTypeSum.getSum();
+                        break;
+                    case 1:
+                    case 2:
+                        quarterSum -= eventTypeSum.getSum();
+                }
+            }
+            resultBeanList.add(new ResultBean(engineer.getId(), engineer.getFio(), eventTypeSumList, quarterSum));
+        });
+
+        return resultBeanList;
+    }
 
     private Event toEntity(Event entity, EventBean bean) {
         if (entity == null) {

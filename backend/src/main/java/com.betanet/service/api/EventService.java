@@ -2,6 +2,7 @@ package com.betanet.service.api;
 
 import com.betanet.domain.Event;
 import com.betanet.domain.bean.EventBean;
+import com.betanet.domain.bean.ResultBean;
 import com.betanet.domain.bean.YearSimpleSelectBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,4 +15,6 @@ public interface EventService {
     List<YearSimpleSelectBean> getEventYears();
 
     boolean createEvent(EventBean eventBean);
+
+    List<ResultBean> getResults(Integer year, Integer quarter);
 }
