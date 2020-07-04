@@ -37,7 +37,7 @@ public class JwtTokenUtil {
 
     public static String generateToken(UserBean userBean, String secret, long expirationTime) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("fio", userBean.getLogin());
+        claims.put("login", userBean.getLogin());
         return doGenerateToken(claims, userBean.getLogin(), secret, expirationTime);
     }
 
