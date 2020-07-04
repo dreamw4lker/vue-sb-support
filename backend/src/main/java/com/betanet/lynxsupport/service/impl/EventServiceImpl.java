@@ -20,6 +20,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQuery;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
 import static com.querydsl.core.types.PathMetadataFactory.forProperty;
 
 @Service
+@Slf4j
 public class EventServiceImpl implements EventService {
 
     @Autowired
@@ -119,7 +121,7 @@ public class EventServiceImpl implements EventService {
             eventRepository.save(event);
             return true;
         } catch (Exception ex) {
-            System.out.println(ex);
+            log.error("Could not create event", ex);
             return false;
         }
     }
