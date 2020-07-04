@@ -16,18 +16,17 @@
     "vue-moment": "4.1.0",
     "vue-router": "3.3.4",
     "vuejs-jwt": "1.1.0",
-    "vuetify": "2.1.18"
+    "vuetify": "2.3.3"
   },
   "devDependencies": {
     "@mdi/js": "5.3.45",
     "@vue/cli-plugin-babel": "4.4.6",
-    "@vue/cli-plugin-e2e-nightwatch": "4.4.6",
     "@vue/cli-plugin-router": "4.4.6",
     "@vue/cli-plugin-unit-jest": "4.4.6",
     "@vue/cli-service": "4.4.6",
     "sass": "1.26.9",
     "sass-loader": "9.0.1",
-    "vue-cli-plugin-vuetify": "2.0.2",
+    "vue-cli-plugin-vuetify": "2.0.6",
     "vue-template-compiler": "2.6.11",
     "vuetify-loader": "1.5.0"
   }
