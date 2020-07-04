@@ -22,7 +22,7 @@ public class EventTypeServiceImpl implements EventTypeService {
 
     @Override
     public Page<EventType> getEventTypes(Pageable pageable) {
-        Pageable withSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "eventType");
+        Pageable withSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "id");
         BooleanBuilder where = new BooleanBuilder();
         where.and(qEventType.deleted.isFalse());
         return eventTypeRepository.findAll(where, withSort);

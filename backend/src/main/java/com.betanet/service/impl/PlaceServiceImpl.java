@@ -22,7 +22,7 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public Page<Place> getPlaces(Pageable pageable) {
-        Pageable withSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "placeName");
+        Pageable withSort = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.ASC, "id");
         BooleanBuilder where = new BooleanBuilder();
         where.and(qPlace.deleted.isFalse());
         return placeRepository.findAll(where, withSort);
