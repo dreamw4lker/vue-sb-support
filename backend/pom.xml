@@ -8,7 +8,7 @@
 
     <parent>
         <groupId>com.betanet</groupId>
-        <artifactId>spring-boot-vuejs</artifactId>
+        <artifactId>lynxsupport</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -107,7 +107,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
+            <version>1.18.12</version>
         </dependency>       
 
         <dependency>
@@ -185,6 +185,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>vue-sb-support</finalName>
+        <finalName>lynxsupport-${parent.version}</finalName>
     </build>
 </project>
