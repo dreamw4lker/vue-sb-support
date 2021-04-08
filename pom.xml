@@ -5,7 +5,7 @@
 
     <groupId>com.betanet</groupId>
     <artifactId>spring-boot-vuejs</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-meta</version>
     <packaging>pom</packaging>
 
     <name>vue-sb-support</name>

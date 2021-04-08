@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.betanet</groupId>
         <artifactId>spring-boot-vuejs</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0-meta</version>
     </parent>
 
     <properties>
@@ -143,6 +143,28 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>public-auto-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                            <filesets>
+                                <fileset>
+                                    <directory>src/main/resources/public</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
@@ -185,6 +207,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>vue-sb-support</finalName>
+        <finalName>vue-sb-support-${project.parent.version}</finalName>
     </build>
 </project>
