@@ -117,12 +117,17 @@
                                 this.loginError = 'Неверный логин или пароль';
                                 return;
                             }
-                            this.$cookie.set(this.$sessionCookieName, response.data);
-                            if (document.referrer !== "" && document.location.href !== "" &&
-                                document.location.href.split('/')[2].split(':')[0] === document.referrer.split('/')[2].split(':')[0]) {
-                                window.location.href = document.referrer;
+                            let jwtObject = this.$jwt.decode(response.data);
+                            if (jwtObject && jwtObject.sub && jwtObject.login && (jwtObject.sub === jwtObject.login) && (jwtObject.login === this.loginItem.login)) {
+                                this.$cookie.set(this.$sessionCookieName, response.data);
+                                if (document.referrer !== "" && document.location.href !== "" &&
+                                    document.location.href.split('/')[2].split(':')[0] === document.referrer.split('/')[2].split(':')[0]) {
+                                    window.location.href = document.referrer;
+                                } else {
+                                    this.$router.push({path: '/main'});
+                                }
                             } else {
-                                this.$router.push({path: '/main'});
+                                this.loginError = 'Не удалось пройти авторизацию';
                             }
                         })
                         .finally(() => {

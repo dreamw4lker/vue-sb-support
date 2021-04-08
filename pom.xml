@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.betanet</groupId>
-    <artifactId>spring-boot-vuejs</artifactId>
+    <artifactId>lynxsupport</artifactId>
     <version>1.0.0-meta</version>
     <packaging>pom</packaging>
 
-    <name>vue-sb-support</name>
-    <description>vue-sb-support</description>
+    <name>lynxsupport</name>
+    <description>lynxsupport</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

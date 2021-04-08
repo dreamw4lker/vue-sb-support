@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.betanet</groupId>
-        <artifactId>spring-boot-vuejs</artifactId>
+        <artifactId>lynxsupport</artifactId>
         <version>1.0.0-meta</version>
     </parent>
 

@@ -83,6 +83,6 @@
   };
 </script>
 
-<style>
-  @import '../public/css/material-icons.css';
+<style scoped>
+
 </style>
