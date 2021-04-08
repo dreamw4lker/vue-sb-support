@@ -207,6 +207,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>vue-sb-support</finalName>
+        <finalName>lynxsupport-${project.parent.version}</finalName>
     </build>
 </project>
