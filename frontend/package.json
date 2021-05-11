@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "0.21.1",
     "core-js": "3.6.5",
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "vue": "2.6.11",
     "vue-cookie": "1.1.4",
     "vue-moment": "4.1.0",
