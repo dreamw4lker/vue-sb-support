@@ -16,7 +16,7 @@
     "vue-moment": "4.1.0",
     "vue-router": "3.3.4",
     "vuejs-jwt": "1.1.0",
-    "vuetify": "2.3.3"
+    "vuetify": "2.6.10"
   },
   "devDependencies": {
     "@mdi/js": "5.3.45",
